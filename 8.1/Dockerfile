@@ -42,7 +42,7 @@ RUN chown -R 1001:0 /wildfly && chown -R 1001:0 $HOME/.pki && \
     chmod -R g+rw /opt/s2i/destination
 
 ADD installs/ /opt/
-ENV JAVA_OPTS "-javaagent /opt/appdynamics/java_server_agent/javaagent.jar"
+ENV JAVA_OPTS_EXT "-javaagent /opt/appdynamics/java_server_agent/javaagent.jar"
 
 USER 1001
 
