@@ -40,7 +40,7 @@ ADD ./contrib/wfcfg/standalone.xml $JBOSS_HOME/standalone/configuration/standalo
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
 RUN chown -R 1001:0 $JBOSS_HOME && \
-    chown -R 1001:0 $JBOSS_HOME/.pki && \
+    chown -R 1001:0 $HOME/.pki && \
     chmod -R ug+rw $JBOSS_HOME && \
     chmod -R g+rw /opt/s2i/destination
 
