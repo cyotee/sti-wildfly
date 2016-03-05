@@ -29,6 +29,8 @@ RUN INSTALL_PKGS="tar unzip bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-
     (curl -0 http://download.jboss.org/wildfly/$WILDFLY_VERSION_BIN/wildfly-$WILDFLY_VERSION_BIN.tar.gz | tar -zx --strip-components=1 -C /wildfly) && \
     mkdir -p /opt/s2i/destination
 
+ENV JBOSS_HOME=/wildfly
+
 # Add sti wildfly customizations
 ADD ./contrib/wfmodules/ /wildfly/modules/
 ADD ./contrib/wfbin/standalone.conf /wildfly/bin/standalone.conf
@@ -46,8 +48,8 @@ RUN chown -R 1001:0 /wildfly && \
     chmod -R g+rw /opt
 
 ADD installs/ /opt/
-ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman, com.appdynamics, com.appdynamics., com.singularity, com.singularity" \
-    JAVA_OPTS_EXT="-javaagent:/opt/appdynamics/java_server_agent/javaagent.jar" \
+ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,com.singularity,org.jboss.logmanager" \
+    JAVA_OPTS_EXT="-javaagent:/opt/appdynamics/java_server_agent/javaagent.jar -Xbootclasspath/p:$(ls ${JBOSS_HOME}/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-*.jar)" \
     APPDYNAMICS_AGENT_APPLICATION_NAME=loadtest \
     APPDYNAMICS_AGENT_TIER_NAME=test \
     APPDYNAMICS_AGENT_NODE_NAME="Wildfly 8.1 Docker"
