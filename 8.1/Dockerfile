@@ -37,12 +37,16 @@ ADD ./contrib/wfcfg/standalone.xml /wildfly/standalone/configuration/standalone.
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
-RUN chown -R 1001:0 /wildfly && chown -R 1001:0 $HOME/.pki && \
+RUN chown -R 1001:0 /wildfly && \
+    chown -R 1001:0 $HOME/.pki && \
     chmod -R ug+rw /wildfly && \
-    chmod -R g+rw /opt/s2i/destination
+    chmod -R g+rw /opt/s2i/destination && \
+    chown -R 1001:0 /opt && \
+    chmod -R ug+rw /opt && \
+    chmod -R g+rw /opt
 
 ADD installs/ /opt/
-ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman, com.appdynamics, com.appdynamics., com.singularity, and com.singularity" \
+ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman, com.appdynamics, com.appdynamics., com.singularity, com.singularity" \
     JAVA_OPTS_EXT="-javaagent:/opt/appdynamics/java_server_agent/javaagent.jar" \
     APPDYNAMICS_AGENT_APPLICATION_NAME=loadtest \
     APPDYNAMICS_AGENT_TIER_NAME=test \
