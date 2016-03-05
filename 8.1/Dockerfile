@@ -42,7 +42,8 @@ RUN chown -R 1001:0 /wildfly && chown -R 1001:0 $HOME/.pki && \
     chmod -R g+rw /opt/s2i/destination
 
 ADD installs/ /opt/
-ENV JAVA_OPTS_EXT="-javaagent /opt/appdynamics/java_server_agent/javaagent.jar" \
+ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman, com.appdynamics, com.appdynamics., com.singularity, and com.singularity"
+    JAVA_OPTS_EXT="-javaagent:/opt/appdynamics/java_server_agent/javaagent.jar" \
     APPDYNAMICS_AGENT_APPLICATION_NAME=loadtest \
     APPDYNAMICS_AGENT_TIER_NAME=test \
     APPDYNAMICS_AGENT_NODE_NAME="Wildfly 8.1 Docker"
