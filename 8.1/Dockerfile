@@ -43,9 +43,7 @@ RUN chown -R 1001:0 /wildfly && \
     chown -R 1001:0 $HOME/.pki && \
     chmod -R ug+rw /wildfly && \
     chmod -R g+rw /opt/s2i/destination && \
-    chown -R 1001:0 /opt && \
-    chmod -R ug+rw /opt && \
-    chmod -R g+rw /opt
+
 
 ADD installs/ /opt/
 
@@ -57,7 +55,13 @@ ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,com.singularity,org.jboss.logma
     APPDYNAMICS_AGENT_TIER_NAME=test \
     APPDYNAMICS_AGENT_NODE_NAME="loadtest-docker"
 
-RUN mkdir -p $JAVA_AGENT_HOME/ver4.1.7.1/logs/$APPDYNAMICS_AGENT_NODE_NAME
+ENV APPD_LOGS="$JAVA_AGENT_HOME/ver4.1.7.1/logs/$APPDYNAMICS_AGENT_NODE_NAME"
+
+RUN mkdir -p $APPD_LOGS
+
+RUN chown -R 1001:0 $APPD_LOGS && \
+    chmod -R ug+rw $APPD_LOGS && \
+    chmod -R g+rw $APPD_LOGS
 
 USER 1001
 
