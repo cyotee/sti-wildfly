@@ -48,11 +48,16 @@ RUN chown -R 1001:0 /wildfly && \
     chmod -R g+rw /opt
 
 ADD installs/ /opt/
+
+ENV JAVA_AGENT_HOME=/opt/appdynamics/java_server_agent/
+
 ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,com.singularity,org.jboss.logmanager" \
-    JAVA_OPTS_EXT="-javaagent:/opt/appdynamics/java_server_agent/javaagent.jar -Xbootclasspath/p:$(ls ${JBOSS_HOME}/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-*.jar)" \
+    JAVA_OPTS_EXT="-javaagent:${JAVA_AGENT_HOME}/javaagent.jar -Xbootclasspath/p:$(ls ${JBOSS_HOME}/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-*.jar)" \
     APPDYNAMICS_AGENT_APPLICATION_NAME=loadtest \
     APPDYNAMICS_AGENT_TIER_NAME=test \
-    APPDYNAMICS_AGENT_NODE_NAME="Wildfly 8.1 Docker"
+    APPDYNAMICS_AGENT_NODE_NAME="loadtest-docker"
+
+RUN mkdir -p $JAVA_AGENT_HOME/ver4.1.7.1/logs/$APPDYNAMICS_AGENT_NODE_NAME
 
 USER 1001
 
