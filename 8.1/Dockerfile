@@ -17,6 +17,8 @@ LABEL io.k8s.description="Platform for building and running JEE applications on 
       io.openshift.tags="builder,wildfly,wildfly81" \
       io.openshift.s2i.destination="/opt/s2i/destination"
 
+ENV JBOSS_HOME=/wildfly
+
 # Install Maven, Wildfly 8
 RUN INSTALL_PKGS="tar unzip bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-devel" && \
     yum install -y --enablerepo=centosplus $INSTALL_PKGS && \
@@ -26,22 +28,20 @@ RUN INSTALL_PKGS="tar unzip bc which lsof java-1.8.0-openjdk java-1.8.0-openjdk-
     tar -zx -C /usr/local) && \
     ln -sf /usr/local/apache-maven-$MAVEN_VERSION/bin/mvn /usr/local/bin/mvn && \
     mkdir -p /wildfly && \
-    (curl -0 http://download.jboss.org/wildfly/$WILDFLY_VERSION_BIN/wildfly-$WILDFLY_VERSION_BIN.tar.gz | tar -zx --strip-components=1 -C /wildfly) && \
+    (curl -0 http://download.jboss.org/wildfly/$WILDFLY_VERSION_BIN/wildfly-$WILDFLY_VERSION_BIN.tar.gz | tar -zx --strip-components=1 -C $JBOSS_HOME) && \
     mkdir -p /opt/s2i/destination
 
-ENV JBOSS_HOME=/wildfly
-
 # Add sti wildfly customizations
-ADD ./contrib/wfmodules/ /wildfly/modules/
-ADD ./contrib/wfbin/standalone.conf /wildfly/bin/standalone.conf
-ADD ./contrib/wfcfg/standalone.xml /wildfly/standalone/configuration/standalone.xml
+ADD ./contrib/wfmodules/ $JBOSS_HOME/modules/
+ADD ./contrib/wfbin/standalone.conf $JBOSS_HOME/bin/standalone.conf
+ADD ./contrib/wfcfg/standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
-RUN chown -R 1001:0 /wildfly && \
-    chown -R 1001:0 $HOME/.pki && \
-    chmod -R ug+rw /wildfly && \
+RUN chown -R 1001:0 $JBOSS_HOME && \
+    chown -R 1001:0 $JBOSS_HOME/.pki && \
+    chmod -R ug+rw $JBOSS_HOME && \
     chmod -R g+rw /opt/s2i/destination && \
 
 
