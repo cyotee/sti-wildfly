@@ -42,7 +42,7 @@ COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 RUN chown -R 1001:0 $JBOSS_HOME && \
     chown -R 1001:0 $JBOSS_HOME/.pki && \
     chmod -R ug+rw $JBOSS_HOME && \
-    chmod -R g+rw /opt/s2i/destination && \
+    chmod -R g+rw /opt/s2i/destination
 
 
 ADD installs/ /opt/
