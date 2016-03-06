@@ -49,6 +49,10 @@ ADD installs/ /opt/
 
 ENV JAVA_AGENT_HOME=/opt/appdynamics/java_server_agent/
 
+RUN chown -R 1001:0 $JAVA_AGENT_HOME && \
+    chmod -R ug+rw $JAVA_AGENT_HOME && \
+    chmod -R g+rw $JAVA_AGENT_HOME
+
 ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,com.singularity,org.jboss.logmanager" \
     JAVA_OPTS_EXT="-javaagent:${JAVA_AGENT_HOME}/javaagent.jar -Xbootclasspath/p:$(ls ${JBOSS_HOME}/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-*.jar)" \
     APPDYNAMICS_AGENT_APPLICATION_NAME=loadtest \
@@ -57,11 +61,12 @@ ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,com.singularity,org.jboss.logma
 
 ENV APPD_LOGS="$JAVA_AGENT_HOME/ver4.1.7.1/logs/$APPDYNAMICS_AGENT_NODE_NAME"
 
-RUN mkdir -p $APPD_LOGS
 
-RUN chown -R 1001:0 $APPD_LOGS && \
-    chmod -R ug+rw $APPD_LOGS && \
-    chmod -R g+rw $APPD_LOGS
+#RUN mkdir -p $APPD_LOGS
+
+#RUN chown -R 1001:0 $APPD_LOGS && \
+#    chmod -R ug+rw $APPD_LOGS && \
+#    chmod -R g+rw $APPD_LOGS
 
 USER 1001
 
