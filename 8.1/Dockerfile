@@ -57,7 +57,7 @@ ENV JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,com.singularity,org.jboss.logma
     JAVA_OPTS_EXT="-javaagent:${JAVA_AGENT_HOME}/javaagent.jar -Xbootclasspath/p:$(ls ${JBOSS_HOME}/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-*.jar)" \
     APPDYNAMICS_AGENT_APPLICATION_NAME=mlbparks \
     APPDYNAMICS_AGENT_TIER_NAME="Stage" \
-    APPDYNAMICS_AGENT_NODE_NAME= ${HOSTNAME}"-cloudapps-27ef.oslab.opentlc.com"
+    APPDYNAMICS_AGENT_NODE_NAME= "cloudapps-27ef.oslab.opentlc.com"
 
 ENV APPD_LOGS="$JAVA_AGENT_HOME/ver4.1.7.1/logs/$APPDYNAMICS_AGENT_NODE_NAME"
 
